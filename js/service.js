@@ -17,7 +17,7 @@ let config = {
 	deviceHeight: 844,
 	deviceScaleFactor: 3,
 	isRunning: false,
-	userConsent: false,
+	userConsent: true,
 	patch: false,
 	niche: "random",
 };
@@ -37,9 +37,9 @@ let activity = [];
 app.runtime.onInstalled.addListener(async (e) => {
 	if (e.reason === "install") {
 		await app.storage.local.set({ config });
-		app.tabs.create({
-			url: "https://getprojects.notion.site/Privacy-Policy-Rewards-Search-Automator-1986977bedc08080a1d2e3a70dcb29e5",
-		});
+		// app.tabs.create({
+		// 	url: "https://getprojects.notion.site/Privacy-Policy-Rewards-Search-Automator-1986977bedc08080a1d2e3a70dcb29e5",
+		// });
 		// app.tabs.create({
 		// 	url: "https://impactbro.com/ref/install?extension=Rewards%20Search%20Automator&ref=EXT-2969668",
 		// });
@@ -552,12 +552,12 @@ async function initialise(desk, mob, min, max) {
 		app.runtime.sendMessage({ action: "updateUI" });
 		return;
 	} else {
-		const dashboard = await app.tabs.create({
-			url: "https://rewards.bing.com/",
-		});
-		const moreTools = await app.tabs.create({
-			url: "https://tmtechnomania.github.io/tools/?ref=rsa",
-		});
+		// const dashboard = await app.tabs.create({
+		// 	url: "https://rewards.bing.com/",
+		// });
+		// const moreTools = await app.tabs.create({
+		// 	url: "https://tmtechnomania.github.io/tools/?ref=rsa",
+		// });
 		// const moreExtensions = await app.tabs.create({
 		// 	url: "https://chromewebstore.google.com/search/getprojects",
 		// });
@@ -565,12 +565,12 @@ async function initialise(desk, mob, min, max) {
 			config.scheduleDefault === "scheduleT3" ||
 			config.scheduleDefault === "scheduleT4"
 		) {
-			setTimeout(async () => {
-				await app.tabs.remove(dashboard.id);
-			}, 3000);
-			setTimeout(async () => {
-				await app.tabs.remove(moreTools.id);
-			}, 6000);
+			// setTimeout(async () => {
+			// 	await app.tabs.remove(dashboard.id);
+			// }, 3000);
+			// setTimeout(async () => {
+			// 	await app.tabs.remove(moreTools.id);
+			// }, 6000);
 			// setTimeout(async () => {
 			// 	await app.tabs.remove(moreExtensions.id);
 			// }, 12000);
@@ -598,11 +598,11 @@ async function initialise(desk, mob, min, max) {
 		}
 	}
 	// a 10% chance to show the user a https://getprojects.gumroad.com/l/rsa if he is not a pro user
-	if (Math.random() < 0.1 && pro.key === "") {
-		app.tabs.create({
-			url: "https://getprojects.gumroad.com/l/rsa",
-		});
-	}
+	// if (Math.random() < 0.1 && pro.key === "") {
+	// 	app.tabs.create({
+	// 		url: "https://getprojects.gumroad.com/l/rsa",
+	// 	});
+	// }
 	// send a msg to popup to update the ui
 	app.runtime.sendMessage({ action: "updateUI" });
 }

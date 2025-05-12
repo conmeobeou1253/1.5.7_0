@@ -12,7 +12,7 @@ let config = {
 	scheduleMax: 45,
 	scheduleDefault: "scheduleT1",
 	isRunning: false,
-	userConsent: false,
+	userConsent: true,
 	patch: false,
 	niche: "random",
 };
@@ -71,9 +71,9 @@ async function fetchStorage() {
 	if (storage.config) {
 		config = { ...config, ...storage.config };
 	}
-	if (!config.userConsent) {
-		window.location.href = "/consent.html";
-	}
+	// if (!config.userConsent) {
+	// 	window.location.href = "/consent.html";
+	// }
 	pro = { ...pro, ...syncStorage.pro };
 	console.log(pro);
 	await updateUI();
