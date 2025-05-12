@@ -469,6 +469,20 @@ $(document).ready(async function () {
 		$yesPatch.addClass("selected").attr("disabled", true);
 		$noPatch.removeClass("selected").attr("disabled", true);
 	}
+
+	// Change the 'Every 5-6 Minutes' button to 60 seconds for testing
+	if ($scheduleT3.length) {
+		$scheduleT3.text("Every 60 Seconds (Test)");
+		$scheduleT3.off("click").on("click", async function() {
+			config.scheduleDefault = "scheduleT3";
+			await app.storage.local.set({ config });
+			$(this).addClass("selected").siblings().removeClass("selected");
+			// Set a schedule alarm for 60 seconds
+			const alarmTime = Date.now() + 60 * 1000;
+			await app.alarms.create("schedule", { when: alarmTime });
+			console.log("%cNext schedule alarm set for 60 seconds (test)", "color:orange");
+		});
+	}
 });
 
 app.runtime.onMessage.addListener(async function (message) {

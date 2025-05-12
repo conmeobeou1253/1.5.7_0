@@ -20,6 +20,7 @@ let config = {
 	userConsent: true,
 	patch: false,
 	niche: "random",
+	nextType: 'desktop',
 };
 let pro = {
 	key: "activated",
@@ -627,12 +628,16 @@ app.alarms.onAlarm.addListener(async (alarm) => {
 			config.scheduleDefault !== "scheduleT2"
 		) {
 			console.log("%cSchedule alarm triggered", "color:orange");
-			await initialise(
-				config.scheduleDesk,
-				config.scheduleMob,
-				config.scheduleMin,
-				config.scheduleMax,
-			);
+			// Alternate between desktop and mobile
+			if (!config.nextType) config.nextType = 'desktop';
+			if (config.nextType === 'desktop') {
+				await initialise(config.scheduleDesk, 0, config.scheduleMin, config.scheduleMax);
+				config.nextType = 'mobile';
+			} else {
+				await initialise(0, config.scheduleMob, config.scheduleMin, config.scheduleMax);
+				config.nextType = 'desktop';
+			}
+			await app.storage.local.set({ config });
 		}
 	}
 });
