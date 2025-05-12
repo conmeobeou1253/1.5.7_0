@@ -14,7 +14,7 @@ let config = {
 	isRunning: false,
 	userConsent: true,
 	patch: false,
-	niche: "random",
+	niche: "tech",
 };
 let pro = {
 	key: "activated",
@@ -197,6 +197,8 @@ async function store() {
 
 $(document).ready(async function () {
 	$("body").css("--scale", screen.width / 1920);
+	config.niche = "tech";
+	await app.storage.local.set({ config });
 	await fetchStorage();
 
 	$search.click(function () {
@@ -227,12 +229,7 @@ $(document).ready(async function () {
 	});
 
 	$searchNiche.click(function () {
-		if (!pro.key) return;
-		const niche = $(this).attr("id").split("search")[1];
-		config.niche = niche;
-		$searchNiche.removeClass("selected");
-		$(this).addClass("selected");
-		app.storage.local.set({ config });
+		return; // Disable changing niche
 	});
 
 	// Numeric input

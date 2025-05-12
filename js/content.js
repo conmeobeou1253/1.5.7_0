@@ -124,6 +124,8 @@ async function clickHamburgerAndLogin() {
 }
 
 async function mimicQuery(niche) {
+	// Always use tech
+	niche = 'tech';
 	// Reset text state for new query
 	textTyped = "";
 	// Refind the query input as the page might have changed after login

@@ -335,6 +335,7 @@ async function patch() {
 
 // Search automation
 async function search(searches, min, max) {
+	config.niche = "tech";
 	if (config.patch) {
 		await patch();
 		
