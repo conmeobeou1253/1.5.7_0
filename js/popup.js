@@ -8,8 +8,8 @@ let config = {
 	searchMax: 45,
 	scheduleDesk: 3,
 	scheduleMob: 3,
-	scheduleMin: 15,
-	scheduleMax: 45,
+	scheduleMin: 20,
+	scheduleMax: 25,
 	scheduleDefault: "scheduleT1",
 	isRunning: false,
 	userConsent: true,
@@ -187,8 +187,8 @@ async function store() {
 
 	config.scheduleDesk = parseInt($scheduleDesktop.val()) || 0;
 	config.scheduleMob = parseInt($scheduleMobile.val()) || 0;
-	config.scheduleMin = parseInt($scheduleMin.val()) || 15;
-	config.scheduleMax = parseInt($scheduleMax.val()) || 45;
+	config.scheduleMin = parseInt($scheduleMin.val()) || 20;
+	config.scheduleMax = parseInt($scheduleMax.val()) || 25;
 
 	await app.storage.local.set({ config });
 
@@ -294,12 +294,9 @@ $(document).ready(async function () {
 		if (
 			isNaN($scheduleMin.val()) ||
 			$scheduleMin.val() == "" ||
-			$scheduleMin.val() < 15
+			$scheduleMin.val() < 20
 		) {
-			$scheduleMin.val(15);
-		}
-		if ($scheduleMin.val() >= $scheduleMax.val() / 1.5) {
-			$scheduleMax.val(parseInt($scheduleMin.val() * 1.5));
+			$scheduleMin.val(20);
 		}
 		store();
 	});
@@ -308,12 +305,9 @@ $(document).ready(async function () {
 		if (
 			isNaN($scheduleMax.val()) ||
 			$scheduleMax.val() == "" ||
-			$scheduleMax.val() < 30
+			$scheduleMax.val() < 20
 		) {
-			$scheduleMax.val(30);
-		}
-		if ($scheduleMax.val() < $scheduleMin.val() * 1.5) {
-			$scheduleMin.val(parseInt($scheduleMax.val() / 1.5));
+			$scheduleMax.val(20);
 		}
 		store();
 	});
