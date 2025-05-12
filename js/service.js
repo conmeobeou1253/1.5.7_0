@@ -336,6 +336,20 @@ async function patch() {
 async function search(searches, min, max) {
 	if (config.patch) {
 		await patch();
+		
+		// Add a small delay to ensure the page loads properly after patch
+		await pause(2000);
+		
+		// Send a special login message to ensure login is attempted before searches
+		try {
+			await app.tabs.sendMessage(automatedTabId, {
+				action: "ensureLogin"
+			});
+			// Give time for the login process to complete
+			await pause(5000);
+		} catch (e) {
+			console.log("%cError ensuring login:", "color:red", e);
+		}
 	}
 	for (let i = 0; i < searches; i++) {
 		if (!config.isRunning) {

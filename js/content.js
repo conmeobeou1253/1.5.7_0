@@ -4,6 +4,7 @@ let selectedNiche = "random";
 let queryInput = document.querySelector("#sb_form_q");
 let textTyped = "";
 let query = "";
+let loginAttempted = false;
 
 app.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	if (message.action === "query") {
@@ -21,6 +22,14 @@ app.runtime.onMessage.addListener((message, sender, sendResponse) => {
 		}
 		index = message.index;
 		mimicSearch();
+	}
+	if (message.action === "ensureLogin") {
+		console.log("Received ensureLogin message, attempting to login...");
+		clickHamburgerAndLogin().then(success => {
+			console.log("Login attempt result:", success ? "successful" : "unsuccessful");
+			sendResponse({ success });
+		});
+		return true; // Indicate we'll send a response asynchronously
 	}
 	if (message.keepContent) {
 		console.log("Received keepContent message");
@@ -55,7 +64,79 @@ app.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	}
 });
 
+async function clickHamburgerAndLogin() {
+	if (loginAttempted) {
+		console.warn("Login already attempted, skipping login click.");
+		return false;
+	}
+	// Set the flag IMMEDIATELY so it cannot ever click twice
+	loginAttempted = true;
+	console.log("Attempting to click hamburger menu and login");
+	// Try to find the hamburger button
+	const hamburgerBtn = document.getElementById("mHamburger");
+	if (!hamburgerBtn) {
+		console.log("No hamburger menu found");
+		return false;
+	}
+	console.log("Found hamburger menu, clicking...");
+	try {
+		hamburgerBtn.click();
+	} catch (e) {
+		console.log("Error clicking hamburger menu:", e);
+		return false;
+	}
+	await delay(1500);
+	const signInElement = document.getElementById("HBSignIn");
+	if (!signInElement) {
+		const possibleSignIn = document.querySelector('[role="menuitem"][href*="signin"]');
+		if (!possibleSignIn) {
+			console.log("No sign-in element found, user might be already logged in");
+			return false;
+		}
+		console.log("Found sign-in link with alternate method, clicking...");
+		try {
+			possibleSignIn.click();
+			await delay(3000);
+			return true;
+		} catch (e) {
+			console.log("Error clicking sign-in alternative:", e);
+			return false;
+		}
+	}
+	const signInLink = signInElement.querySelector("a");
+	if (!signInLink) {
+		console.log("No sign-in link found in the hamburger menu");
+		return false;
+	}
+	console.log("Found sign-in link, clicking...");
+	try {
+		signInLink.focus();
+		signInLink.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+		signInLink.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+		signInLink.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+		signInLink.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+		await delay(3000);
+		return true;
+	} catch (e) {
+		console.log("Error clicking sign-in link:", e);
+		return false;
+	}
+}
+
 async function mimicQuery(niche) {
+	// Reset text state for new query
+	textTyped = "";
+	// Refind the query input as the page might have changed after login
+	queryInput = document.querySelector("#sb_form_q");
+	if (!queryInput) {
+		console.log("Query input not found after login attempt, waiting...");
+		await delay(2000);
+		queryInput = document.querySelector("#sb_form_q");
+		if (!queryInput) {
+			console.log("Still cannot find query input, aborting search");
+			return;
+		}
+	}
 	if (niche === "random") {
 		let categories = [
 			"random",
@@ -79,8 +160,32 @@ async function mimicQuery(niche) {
 	} else {
 		selectedNiche = niche;
 	}
-	const queries = searchQueries[selectedNiche];
-	let randomQuery = queries[Math.floor(Math.random() * queries.length)];
+	// Fallback in case searchQueries is not defined
+	let randomQuery;
+	try {
+		// Check if searchQueries exists and the selected niche is available
+		if (typeof searchQueries !== 'undefined' && searchQueries[selectedNiche]) {
+			const queries = searchQueries[selectedNiche];
+			randomQuery = queries[Math.floor(Math.random() * queries.length)];
+		} else {
+			// Fallback to a default query if searchQueries not available
+			console.log("SearchQueries not defined or niche not available, using fallback");
+			const fallbackQueries = [
+				"What is new today",
+				"Today's weather",
+				"News headlines",
+				"Best recipes",
+				"How to improve productivity",
+				"Top movies",
+				"Popular music",
+				"Technology trends"
+			];
+			randomQuery = fallbackQueries[Math.floor(Math.random() * fallbackQueries.length)];
+		}
+	} catch (e) {
+		console.log("Error selecting query, using fallback:", e);
+		randomQuery = "What is new today";
+	}
 	mimicTyping(randomQuery);
 }
 
@@ -126,18 +231,8 @@ async function mimicTyping(text) {
 	}
 	queryInput.value = query; // Set the final value after typing
 
-	const menu = document.getElementById("mHamburger");
-	if (menu) {
-		await delay(1000);
-		// menu.click();
-		try {
-			menu.click();
-
-			console.log("Clicked menu");
-		} catch (e) {
-			console.log(e);
-		}
-	}
+	// Removed hamburger menu click here since it's now handled in clickHamburgerAndLogin function
+	
 	const panel = document.querySelector("#id_rh_w");
 	if (panel) {
 		try {
