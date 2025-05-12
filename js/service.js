@@ -490,12 +490,6 @@ async function initialise(desk, mob, min, max) {
 	}
 	// Clear any existing alarms for schedules
 	await app.alarms.clear("schedule");
-	// Confirm if the number of searches are valid
-	// if (desk < 1 && mob < 1) {
-	// 	config.isRunning = false;
-	// 	await app.storage.local.set({ config });
-	// 	return;
-	// }
 	// Set the total searches
 	totalSearches = desk + mob;
 	// Start the automation
@@ -517,12 +511,13 @@ async function initialise(desk, mob, min, max) {
 		await search(desk, min, max);
 		if (mob > 0 && config.isRunning) {
 			isMobile = true;
+			// FORCE PATCH MODE FOR MOBILE
+			config.patch = true;
+			await app.storage.local.set({ config });
+			await patch();
 			await debug(automatedTabId);
 			await search(mob, min, max);
 			await detach(automatedTabId);
-			if (config.patch) {
-				await patch();
-			}
 			isMobile = false;
 		}
 	}
@@ -534,12 +529,13 @@ async function initialise(desk, mob, min, max) {
 		});
 		await pause(3000);
 		isMobile = true;
+		// FORCE PATCH MODE FOR MOBILE
+		config.patch = true;
+		await app.storage.local.set({ config });
+		await patch();
 		await debug(automatedTabId);
 		await search(mob, min, max);
 		await detach(automatedTabId);
-		if (config.patch) {
-			await patch();
-		}
 		isMobile = false;
 	}
 	if (pro.key !== ""){

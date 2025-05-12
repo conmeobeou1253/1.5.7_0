@@ -463,6 +463,12 @@ $(document).ready(async function () {
 			}
 		}
 	});
+
+	// Force patch toggle ON and disable
+	if ($yesPatch.length && $noPatch.length) {
+		$yesPatch.addClass("selected").attr("disabled", true);
+		$noPatch.removeClass("selected").attr("disabled", true);
+	}
 });
 
 app.runtime.onMessage.addListener(async function (message) {
