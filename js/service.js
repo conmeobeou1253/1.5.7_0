@@ -669,12 +669,16 @@ app.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 			config.scheduleDefault !== "scheduleT2"
 		) {
 			console.log("%cSchedule triggered by User", "color:orange");
-			await initialise(
-				config.scheduleDesk,
-				config.scheduleMob,
-				config.scheduleMin,
-				config.scheduleMax,
-			);
+			// Alternate between desktop and mobile, starting with desktop if not set
+			if (!config.nextType) config.nextType = 'desktop';
+			if (config.nextType === 'desktop') {
+				await initialise(config.scheduleDesk, 0, config.scheduleMin, config.scheduleMax);
+				config.nextType = 'mobile';
+			} else {
+				await initialise(0, config.scheduleMob, config.scheduleMin, config.scheduleMax);
+				config.nextType = 'desktop';
+			}
+			await app.storage.local.set({ config });
 		}
 	}
 	if (message.action === "simulate") {
