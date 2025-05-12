@@ -583,7 +583,7 @@ async function initialise(desk, mob, min, max) {
 				});
 				console.log("%cNext schedule alarm set", "color:orange");
 			} else {
-				const delayInSeconds = Math.floor(Math.random() * 300) + 900;
+				const delayInSeconds = Math.floor(Math.random() * 301) + 1200;
 				const alarmTime = Date.now() + delayInSeconds * 1000;
 				await app.alarms.create("schedule", {
 					when: alarmTime,
