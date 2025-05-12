@@ -1,0 +1,285 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    position: relative;
+    --white: #fff;
+    --black: #000;
+    --light: #F0F0F0;
+    --dark: #333;
+    --primary: #0072ff;
+}
+
+body {
+    --scale: 1;
+    font-family: 'Outfit', sans-serif;
+    height: calc(480px * var(--scale));
+    width: calc(360px * var(--scale));
+}
+
+header {
+    align-items: center;
+    background: var(--white);
+    display: flex;
+    height: calc(48px * var(--scale));
+    gap: calc(16px * var(--scale));
+    justify-content: center;
+    padding: 0 calc(8px * var(--scale));
+    width: 100%;
+}
+
+header a{
+    --border: var(--light);
+    align-items: center;
+    border-bottom: 4px solid var(--border);
+    border-top: 4px solid transparent;
+    color: var(--dark);
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    font-size: calc(16px * var(--scale));
+    height: 100%;
+    justify-content: center;
+}
+
+header a.selected{
+    --border: var(--primary) !important;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - calc(96px * var(--scale)));
+    gap: calc(8px * var(--scale));
+    margin: calc(8px * var(--scale));
+}
+
+#searchInput, #scheduleInput, #searchDelay, #scheduleDelay{
+    background: var(--light);
+    border-radius: calc(8px * var(--scale));
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--scale));
+    justify-content: center;
+    padding: calc(8px * var(--scale));
+    overflow: hidden;
+}
+
+#searchPerform, #schedulePerform{
+    align-items: center;
+    background: var(--primary);
+    border: none;
+    border-radius: calc(4px * var(--scale));
+    color: var(--white);
+    cursor: pointer;
+    display: flex;
+    font-size: calc(16px * var(--scale));
+    font-weight: 700;
+    height: calc(36px * var(--scale));
+    justify-content: center;
+    padding: calc(8px * var(--scale));
+    width: 100%;
+}
+
+.input{
+    align-items: center;
+    display: flex;
+    height: calc(72px * var(--scale));
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: calc(50% - calc(4px * var(--scale)));
+}
+
+.input label{
+    font-size: calc(14px * var(--scale));
+    font-weight: 300;
+    letter-spacing: 0;
+    left: 10%;
+    position: absolute;
+    top: 50%;
+    translate: -50% -50%;
+    rotate: -90deg;
+}
+
+.input input, .input input:focus, .input input:active{
+    align-items: center;
+    background: transparent;
+    border: none;
+    display: flex;
+    font-size: calc(64px * var(--scale));
+    font-weight: 300;
+    padding: 0 0 0 calc(32px * var(--scale));
+    outline: none;
+    width: 100%;
+}
+
+#searchDefault, #scheduleDefault{
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--scale));
+    justify-content: center;
+    width: 100%;
+}
+
+#searchDefault a, #scheduleDefault a{
+    align-items: center;
+    background: var(--light);
+    border-radius: calc(4px * var(--scale));
+    border: none;
+    display: flex;
+    font-size: calc(14px * var(--scale));
+    height: calc(32px * var(--scale));
+    justify-content: center;
+    width: calc(50% - calc(4px * var(--scale)));
+}
+
+#searchDefault a.selected, #scheduleDefault a.selected{
+    background: var(--primary);
+    color: var(--white);
+}
+
+#searchNiche {
+    align-items: center;
+    background: var(--white);
+    border-radius: calc(8px * var(--scale));
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--scale));
+    justify-content: space-between;
+}
+
+#searchNiche a{
+    align-items: center;
+    background: var(--light);
+    border-radius: calc(4px * var(--scale));
+    border: none;
+    color: var(--dark);
+    cursor: pointer;
+    display: flex;
+    font-size: calc(14px * var(--scale));
+    flex: 1;
+    height: calc(32px * var(--scale));
+    justify-content: center;
+}
+
+#searchNiche a.selected{
+    background: var(--primary);
+    color: var(--white);
+}
+
+#patch {
+    align-items: center;
+    display: flex;
+    font-size: calc(16px * var(--scale));
+    gap: calc(8px * var(--scale));
+    justify-content: center;
+    overflow: hidden;
+}
+
+#patch a{
+    align-items: center;
+    background: var(--light);
+    border-radius: calc(4px * var(--scale));
+    border: none;
+    color: var(--dark);
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    font-size: calc(14px * var(--scale));
+    height: calc(32px * var(--scale));
+    justify-content: center;
+}
+
+#patch a.selected{
+    background: var(--primary);
+    color: var(--white);
+}
+
+footer{
+    align-items: center;
+    background: var(--light);
+    display: flex;
+    font-size: calc(20px * var(--scale));
+    height: calc(48px * var(--scale));
+    padding: calc(8px * var(--scale));
+}
+
+footer a, footer a span{
+    align-content: center;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    height: calc(32px * var(--scale));
+    text-align: center;
+}
+
+.material-symbols-outlined{
+    font-size: calc(20px * var(--scale)) !important;
+}
+
+#pro {
+    background: var(--light);
+    border-radius: calc(8px * var(--scale));
+    height: calc(72px * var(--scale));
+    padding: calc(8px * var(--scale));
+}
+
+#pro h3 {
+    font-size: calc(16px * var(--scale));
+    font-weight: 500;
+    margin: 0 0 calc(4px * var(--scale)) 0;
+}
+
+#pro input {
+    background: var(--white);
+    border: none;
+    font-size: calc(16px * var(--scale));
+    height: calc(32px * var(--scale));
+    padding: calc(0px * var(--scale)) calc(8px * var(--scale));
+    width: 100%;
+}
+
+#pro input:focus, #pro input:active {
+    outline: none;
+}
+
+.pro::after {
+    align-items: center;
+    background: transparent;
+    backdrop-filter: blur(4px);
+    color: var(--white);
+    display: flex;
+    font-size: calc(12px * var(--scale));
+    font-weight: 700;
+    justify-content: center;
+    position: absolute;
+    inset: 0;
+}
+
+.pro:hover::after {
+    background: var(--primary);
+    content: 'PRO Access only!';
+}
+
+footer a:last-child{
+    align-items: center;
+    cursor: pointer;
+    flex: 1;
+    font-size: calc(14px * var(--scale));
+    justify-content: flex-end;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+a, a:visited{
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 500;
+    cursor: pointer;
+}
