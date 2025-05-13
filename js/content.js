@@ -80,7 +80,10 @@ async function clickHamburgerAndLogin() {
 	}
 	console.log("Found hamburger menu, clicking...");
 	try {
-		hamburgerBtn.click();
+		hamburgerBtn.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+		hamburgerBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+		hamburgerBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+		hamburgerBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 	} catch (e) {
 		console.log("Error clicking hamburger menu:", e);
 		return false;
@@ -95,7 +98,10 @@ async function clickHamburgerAndLogin() {
 		}
 		console.log("Found sign-in link with alternate method, clicking...");
 		try {
-			possibleSignIn.click();
+			possibleSignIn.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+			possibleSignIn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+			possibleSignIn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+			possibleSignIn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 			await delay(3000);
 			return true;
 		} catch (e) {
@@ -238,7 +244,10 @@ async function mimicTyping(text) {
 	const panel = document.querySelector("#id_rh_w");
 	if (panel) {
 		try {
-			panel.click();
+			panel.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+			panel.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+			panel.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+			panel.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 			console.log("Clicked panel");
 		} catch (e) {
 			console.log("Panel click failed:", e);
