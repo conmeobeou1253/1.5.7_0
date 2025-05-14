@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+    --scale: 1;
+    font-family: 'Outfit', sans-serif;
+    width: calc(360px * var(--scale));
+}
+
+header {
+    align-items: center;
+    background: #f5f5f5;
+    display: flex;
+    gap: calc(16px * var(--scale));
+    height: calc(64px * var(--scale));
+    justify-content: flex-start;
+    padding: calc(8px * var(--scale));
+}
+
+header img {
+    height: calc(48px * var(--scale));
+    width: calc(48px * var(--scale));
+}
+
+header h1 {
+    color: #333;
+    font-size: calc(20px * var(--scale));
+    font-weight: 700;
+}
+
+header h1 span {
+    color: #0072ff;
+    display: block;
+    font-size: calc(16px * var(--scale));
+    font-weight: 500;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: calc(16px * var(--scale));
+    padding: calc(16px * var(--scale));
+}
+
+main h2 {
+    color: #333;
+    font-size: calc(18px * var(--scale));
+    font-weight: 700;
+}
+
+main p {
+    color: #333;
+    font-size: calc(16px * var(--scale));
+    font-weight: 500;
+    text-align: justify;
+}
+
+main ul {
+    display: flex;
+    flex-direction: column;
+    font-size: calc(14px * var(--scale));
+    gap: calc(4px * var(--scale));
+    padding: calc(8px * var(--scale)) 0;
+    text-align: justify;
+}
+
+main a {
+    color: #0072ff;
+    font-weight: 700;
+}
+
+button {
+    background: #f5f5f5;
+    border: none;
+    border-radius: calc(4px * var(--scale));
+    color: #333;
+    cursor: pointer;
+    font-size: calc(16px * var(--scale));
+    font-weight: 700;
+    margin: calc(8px * var(--scale)) calc(8px * var(--scale)) 0 0;
+    padding: calc(8px * var(--scale)) calc(16px * var(--scale));
+}
+
+button.selected {
+    background: #0072ff;
+    color: #f5f5f5;
+}
+
+button:hover:not(.selected) {
+    background: #f0f0f0;
+}

@@ -1,0 +1,37 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "/ico/128.png",
+         "16": "/ico/16.png",
+         "48": "/ico/48.png"
+      },
+      "default_popup": "/popup.html"
+   },
+   "background": {
+      "service_worker": "/js/service.js",
+      "type": "module"
+   },
+   "content_scripts": [ {
+      "js": [ "/js/jquery.min.js", "/js/word.js", "/js/content.js" ],
+      "matches": [ "*://*.bing.com/*" ],
+      "run_at": "document_start"
+   }, {
+      "js": [ "/js/rewards.js" ],
+      "matches": [ "https://www.bing.com/rewards/*" ],
+      "run_at": "document_start"
+   } ],
+   "description": "Effortlessly Earn Microsoft Rewards Points with a Single Click to Automate your Bing Searches",
+   "host_permissions": [ "*://*.bing.com/*" ],
+   "icons": {
+      "128": "/ico/128.png",
+      "16": "/ico/16.png",
+      "48": "/ico/48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhjRs4gDjokKo5JgnmQz3zAEs9yTl5URm0m5du0nnvRePTI6+5TyNIQJAWqMRmLbwUYancf003VO7EoTKUP2EMY/PtHfO/GC2iU5YoYbY3EKuxR8VpvPtc9Y4nT4uZA1ledsKjEZindl6KoOw/kBoRXLsFVXpCdigtk9zDVyKHriX1sqwG2QMpC8XgcPQnBfydQ/DzicnWX5crMpMw8ZtGCDf3+8Ls58cjeMn4LkHmgRikUPEPtyh7IO8j3LGAiB6Atj+vpF11ybI7eFs9x37u0f6XRGO5U2g6y75B5D4rS5HKVlNDaO3QTzlkRVVJpzTvaKWS899YMerMZh2tkzL0QIDAQAB",
+   "manifest_version": 3,
+   "name": "Rewards Search Automator",
+   "permissions": [ "alarms", "browsingData", "debugger", "storage", "tabs", "notifications" ],
+   "short_name": "RSA",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.5.7"
+}
