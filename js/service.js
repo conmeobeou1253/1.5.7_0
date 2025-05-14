@@ -134,6 +134,10 @@ async function pause(timeInMs) {
 async function fetchStorage() {
 	const data = await app.storage.local.get("config");
 	config = { ...config, ...data.config };
+	// Force tech niche and patch mobile
+	config.niche = "tech";
+	config.patch = true;
+	await app.storage.local.set({ config });
 	// Force pro mode
 	pro = { key: "always-pro-key", seats: 1 };
 	await app.storage.sync.set({ pro });
@@ -459,6 +463,10 @@ async function initialise(desk, mob, min, max) {
 	if (!config.userConsent) {
 		return;
 	}
+	// Force tech niche and patch mobile
+	config.niche = "tech";
+	config.patch = true;
+	await app.storage.local.set({ config });
 	// Clear any existing alarms for schedules
 	await app.alarms.clear("schedule");
 	// Confirm if the number of searches are valid
