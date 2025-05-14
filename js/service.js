@@ -535,12 +535,6 @@ async function initialise(desk, mob, min, max) {
 		}
 		isMobile = false;
 	}
-	if (pro.key !== ""){
-		await app.tabs.create({
-			url: "https://www.bing.com/rewards/panelflyout?channel=bingflyout&partnerId=BingRewards",
-		});
-		await pause(5000);
-	}
 	if (config.isRunning && pro.key !== "" && activity.length > 0) {
 		await automateActivity(activity);
 	}
@@ -558,60 +552,8 @@ async function initialise(desk, mob, min, max) {
 		// send a msg to popup to update the ui
 		app.runtime.sendMessage({ action: "updateUI" });
 		return;
-	} else {
-		const dashboard = await app.tabs.create({
-			url: "https://rewards.bing.com/",
-		});
-		const moreTools = await app.tabs.create({
-			url: "https://tmtechnomania.github.io/tools/?ref=rsa",
-		});
-		// const moreExtensions = await app.tabs.create({
-		// 	url: "https://chromewebstore.google.com/search/getprojects",
-		// });
-		if (
-			config.scheduleDefault === "scheduleT3" ||
-			config.scheduleDefault === "scheduleT4"
-		) {
-			setTimeout(async () => {
-				await app.tabs.remove(dashboard.id);
-			}, 3000);
-			setTimeout(async () => {
-				await app.tabs.remove(moreTools.id);
-			}, 6000);
-			// setTimeout(async () => {
-			// 	await app.tabs.remove(moreExtensions.id);
-			// }, 12000);
-			// Set a schedule alarm between 5-7.5 minutes random if the schedule is T3 or else between 15-20 minutes if the schedule is T4
-			if (config.scheduleDefault === "scheduleT3") {
-				const delayInSeconds = Math.floor(Math.random() * 150) + 300;
-				const alarmTime = Date.now() + delayInSeconds * 1000;
-				await app.alarms.create("schedule", {
-					when: alarmTime,
-				});
-				console.log("%cNext schedule alarm set", "color:orange");
-			} else {
-				const delayInSeconds = Math.floor(Math.random() * 300) + 900;
-				const alarmTime = Date.now() + delayInSeconds * 1000;
-				await app.alarms.create("schedule", {
-					when: alarmTime,
-				});
-				console.log("%cNext schedule alarm set", "color:orange");
-			}
-		}
-		try {
-			await app.tabs.remove(automatedTabId);
-		} catch (error) {
-			console.log("%cFailed to remove tab: " + error, "color:red");
-		}
 	}
-	// a 10% chance to show the user a https://getprojects.gumroad.com/l/rsa if he is not a pro user
-	if (Math.random() < 0.1 && pro.key === "") {
-		app.tabs.create({
-			url: "https://getprojects.gumroad.com/l/rsa",
-		});
-	}
-	// send a msg to popup to update the ui
-	app.runtime.sendMessage({ action: "updateUI" });
+	// Removed: opening rewards.bing.com, moreTools, or panelflyout tabs for both desktop and mobile search.
 }
 
 // Handle the schedule alarm
