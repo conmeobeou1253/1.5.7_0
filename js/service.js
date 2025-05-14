@@ -305,25 +305,23 @@ async function detach(tabId) {
 }
 
 async function patch() {
-	const origin = ["https://www.bing.com"];
+	const origins = ["https://www.bing.com"];
 	await app.browsingData.remove(
 		{
-			origins: origin,
+			origins: origins,
 			since: 0,
 		},
 		{
 			cacheStorage: true,
 			localStorage: true,
 			serviceWorkers: true,
-			pluginData: true,
 			cookies: true,
-		},
+			indexedDB: true,
+			webSQL: true,
+			fileSystems: true
+		}
 	);
-	await app.tabs.update(automatedTabId, {
-		url: "https://rewards.bing.com/",
-	});
-	// url: "https://www.bing.com/rewards/panelflyout?channel=bingflyout&partnerId=BingRewards",
-	await pause(3000);
+	// Bỏ qua bước update sang rewards.bing.com
 	await app.tabs.update(automatedTabId, {
 		url: "https://www.bing.com/",
 	});
