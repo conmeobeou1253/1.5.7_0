@@ -293,6 +293,21 @@ async function detach(tabId) {
 
 async function patch() {
 	const origin = ["https://www.bing.com"];
+	// First clear
+	await app.browsingData.remove(
+		{
+			origins: origin,
+			since: 0,
+		},
+		{
+			cacheStorage: true,
+			localStorage: true,
+			serviceWorkers: true,
+			pluginData: true,
+			cookies: true,
+		},
+	);
+	// Second clear
 	await app.browsingData.remove(
 		{
 			origins: origin,
@@ -309,14 +324,13 @@ async function patch() {
 	await app.tabs.update(automatedTabId, {
 		url: "https://rewards.bing.com/",
 	});
-	// url: "https://www.bing.com/rewards/panelflyout?channel=bingflyout&partnerId=BingRewards",
 	await pause(3000);
 	await app.tabs.update(automatedTabId, {
 		url: "https://www.bing.com/",
 	});
 	await pause(3000);
 	await app.tabs.reload(automatedTabId);
-	await pause(4000); // Wait longer to ensure content script is loaded
+	await pause(4000);
 	console.log("Patched Bing, sending login trigger message");
 	await app.tabs.sendMessage(automatedTabId, { action: "triggerLoginAfterPatch" });
 }
