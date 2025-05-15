@@ -143,10 +143,32 @@ async function fetchStorage() {
 	await app.storage.sync.set({ pro });
 }
 
+// Hàm tạo/cập nhật alarm schedule
+async function setupScheduleAlarm() {
+    await fetchStorage();
+    await app.alarms.clear("schedule");
+    if (config.scheduleDefault === "scheduleT3") {
+        // 5-6 phút
+        const period = 5 + Math.random(); // 5-6 phút
+        app.alarms.create("schedule", { periodInMinutes: period });
+        console.log("[Schedule] Đã tạo alarm lặp lại mỗi", period, "phút");
+    } else if (config.scheduleDefault === "scheduleT4") {
+        // 15-17.5 phút
+        const period = 15 + Math.random() * 2.5; // 15-17.5 phút
+        app.alarms.create("schedule", { periodInMinutes: period });
+        console.log("[Schedule] Đã tạo alarm lặp lại mỗi", period, "phút");
+    } else {
+        // Không lặp lại
+        await app.alarms.clear("schedule");
+        console.log("[Schedule] Đã tắt alarm schedule");
+    }
+}
+
 // Startup function
 app.runtime.onStartup.addListener(async () => {
 	await fetchStorage();
 	await reverify();
+	await setupScheduleAlarm();
 	if (config.userConsent && pro.key !== "") {
 		if (config.scheduleDefault !== "scheduleT1") {
 			config.isRunning = true;
@@ -162,6 +184,7 @@ app.runtime.onStartup.addListener(async () => {
 				config.scheduleMin,
 				config.scheduleMax,
 			);
+			await setupScheduleAlarm();
 		} else {
 			config.isRunning = false;
 			await app.storage.local.set({ config });
@@ -595,8 +618,10 @@ app.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 		config.isRunning = false;
 		await app.storage.local.set({ config });
 		await app.action.setBadgeText({ text: "" });
+		await setupScheduleAlarm();
 	}
 	if (message.action === "schedule") {
+		await setupScheduleAlarm();
 		if (
 			config.scheduleDefault !== "scheduleT1" &&
 			config.scheduleDefault !== "scheduleT2"
@@ -608,6 +633,7 @@ app.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 				config.scheduleMin,
 				config.scheduleMax,
 			);
+			await setupScheduleAlarm();
 		}
 	}
 	if (message.action === "simulate") {
