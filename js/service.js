@@ -299,7 +299,7 @@ async function detach(tabId) {
 		await app.debugger.sendCommand(
 			{ tabId: tabId },
 			"Emulation.setEmitTouchEventsForMouse",
-			{ enabled: false },
+			{ enabled: false }
 		);
 
 		// Detach debugger
@@ -314,9 +314,30 @@ async function detach(tabId) {
 	}
 }
 
+// Inject content script để clear localStorage/sessionStorage trên Bing
+async function clearBingStorageWithContentScript(tabId) {
+    try {
+        await app.scripting.executeScript({
+            target: { tabId: tabId },
+            func: () => {
+                try {
+                    window.localStorage.clear();
+                    window.sessionStorage.clear();
+                    console.log("Cleared localStorage and sessionStorage from content script!");
+                } catch (e) {
+                    console.error("Error clearing storage:", e);
+                }
+            }
+        });
+    } catch (e) {
+        console.error("Failed to inject content script for clearing storage:", e);
+    }
+}
+
+// Patch Bing: clear cookies, cache, localStorage, serviceWorkers, pluginData
 async function patch() {
 	const origin = ["https://www.bing.com"];
-	// First clear
+	// 1. Dùng browsingData
 	await app.browsingData.remove(
 		{
 			origins: origin,
@@ -330,20 +351,20 @@ async function patch() {
 			cookies: true,
 		},
 	);
-	// Second clear
-	await app.browsingData.remove(
-		{
-			origins: origin,
-			since: 0,
-		},
-		{
-			cacheStorage: true,
-			localStorage: true,
-			serviceWorkers: true,
-			pluginData: true,
-			cookies: true,
-		},
-	);
+	// 2. Dùng cookies API để xóa từng cookie
+	if (chrome && chrome.cookies) {
+		chrome.cookies.getAll({ domain: "bing.com" }, function(cookies) {
+			for (let cookie of cookies) {
+				let url = (cookie.secure ? "https://" : "http://") + cookie.domain.replace(/^\./, "") + cookie.path;
+				chrome.cookies.remove({
+					url: url,
+					name: cookie.name,
+					storeId: cookie.storeId
+				});
+			}
+		});
+	}
+	// 3. Reload lại tab như cũ
 	await app.tabs.update(automatedTabId, {
 		url: "https://rewards.bing.com/",
 	});
@@ -354,7 +375,9 @@ async function patch() {
 	await pause(3000);
 	await app.tabs.reload(automatedTabId);
 	await pause(4000);
-	console.log("Patched Bing, sending login trigger message");
+	// 4. Inject content script để clear localStorage/sessionStorage
+	await clearBingStorageWithContentScript(automatedTabId);
+	console.log("Patched Bing, cleared cookies, localStorage, sessionStorage, sending login trigger message");
 	await app.tabs.sendMessage(automatedTabId, { action: "triggerLoginAfterPatch" });
 }
 
