@@ -84,6 +84,23 @@ async function fetchStorage() {
 	await updateUI();
 }
 
+// Hiển thị log lịch sử schedule
+async function loadScheduleLog() {
+	const { scheduleLogs = [] } = await app.storage.local.get("scheduleLogs");
+	const $log = $("#scheduleLog");
+	if (scheduleLogs.length === 0) {
+		$log.html('<div style="color:#888;font-size:11px">No schedule log yet.</div>');
+		return;
+	}
+	let html = '<div style="font-size:11px;color:#333;"><b>Lịch sử chạy Schedule:</b><ul style="padding-left:16px;margin:2px 0;max-height:48px;overflow-y:auto;">';
+	for (let i = scheduleLogs.length - 1; i >= 0 && i > scheduleLogs.length - 6; i--) {
+		const t = new Date(scheduleLogs[i]);
+		html += `<li style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">${t.toLocaleString()}</li>`;
+	}
+	html += '</ul></div>';
+	$log.html(html);
+}
+
 // Update UI
 async function updateUI() {
 	// Set the values
@@ -153,6 +170,7 @@ async function updateUI() {
 	});
 
 	compare();
+	await loadScheduleLog();
 }
 
 // Compare
@@ -208,6 +226,7 @@ async function store() {
 $(document).ready(async function () {
 	$("body").css("--scale", screen.width / 1920);
 	await fetchStorage();
+	await loadScheduleLog();
 
 	$search.click(function () {
 		$search.addClass("selected");

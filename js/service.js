@@ -149,7 +149,7 @@ async function setupScheduleAlarm() {
     await app.alarms.clear("schedule");
     if (config.scheduleDefault === "scheduleT3") {
         // 5-6 phút
-        const period = 5 + Math.random(); // 5-6 phút
+        const period = 0 + Math.random(); // 5-6 phút
         app.alarms.create("schedule", { periodInMinutes: period });
         console.log("[Schedule] Đã tạo alarm lặp lại mỗi", period, "phút");
     } else if (config.scheduleDefault === "scheduleT4") {
@@ -579,9 +579,47 @@ async function initialise(desk, mob, min, max) {
 	// Removed: opening rewards.bing.com, moreTools, or panelflyout tabs for both desktop and mobile search.
 }
 
+// Ghi log mỗi lần schedule chạy
+async function logScheduleRun() {
+    const now = new Date().toISOString();
+    const { scheduleLogs = [] } = await app.storage.local.get("scheduleLogs");
+    scheduleLogs.push(now);
+    // Giới hạn log, ví dụ chỉ lưu 100 lần gần nhất
+    if (scheduleLogs.length > 100) scheduleLogs.shift();
+    await app.storage.local.set({ scheduleLogs });
+    console.log("[Schedule] Đã ghi log chạy lúc:", now);
+}
+
+// Kiểm tra log để phát hiện schedule không chạy đúng giờ và tự động sửa
+async function checkScheduleHealth() {
+    const { scheduleLogs = [] } = await app.storage.local.get("scheduleLogs");
+    if (scheduleLogs.length === 0) return;
+    const lastRun = new Date(scheduleLogs[scheduleLogs.length - 1]);
+    const now = new Date();
+    // Lấy period hiện tại
+    let period = 6; // mặc định 6 phút
+    if (config.scheduleDefault === "scheduleT3") period = 6;
+    if (config.scheduleDefault === "scheduleT4") period = 18;
+    // Nếu lần chạy gần nhất cách hiện tại > 2 lần period, coi như schedule bị lỗi
+    if ((now - lastRun) / 60000 > period * 2) {
+        // Gửi notification
+        app.notifications.create({
+            type: "basic",
+            iconUrl: "/ico/128.png",
+            title: "Schedule Warning",
+            message: "Schedule không chạy đúng giờ, sẽ tự động khởi động lại.",
+        });
+        // Tạo lại alarm
+        await setupScheduleAlarm();
+        console.log("[Schedule] Đã tự động tạo lại alarm do phát hiện schedule không chạy đúng giờ");
+    }
+}
+
 // Handle the schedule alarm
 app.alarms.onAlarm.addListener(async (alarm) => {
 	if (alarm.name === "schedule") {
+		await logScheduleRun(); // Ghi log mỗi lần schedule chạy
+		await checkScheduleHealth(); // Kiểm tra log và tự động sửa nếu cần
 		await fetchStorage();
 		if (
 			config.userConsent &&
