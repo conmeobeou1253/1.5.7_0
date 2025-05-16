@@ -505,7 +505,7 @@ async function initialise(desk, mob, min, max) {
 	config.patch = true;
 	await app.storage.local.set({ config });
 	// Clear any existing alarms for schedules
-	await app.alarms.clear("schedule");
+	// await app.alarms.clear("schedule"); // ĐÃ XÓA DÒNG NÀY
 	// Confirm if the number of searches are valid
 	// if (desk < 1 && mob < 1) {
 	// 	config.isRunning = false;
