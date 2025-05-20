@@ -377,6 +377,32 @@ async function patch() {
 	await pause(4000);
 	// 4. Inject content script để clear localStorage/sessionStorage
 	await clearBingStorageWithContentScript(automatedTabId);
+	// 5. Inject script xóa cookies toàn diện bằng document.cookie
+	try {
+		await app.scripting.executeScript({
+			target: { tabId: automatedTabId },
+			func: () => {
+				(function () {
+					var cookies = document.cookie.split("; ");
+					for (var c = 0; c < cookies.length; c++) {
+						var d = window.location.hostname.split(".");
+						while (d.length > 0) {
+							var cookieBase = encodeURIComponent(cookies[c].split(";")[0].split("=")[0]) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; domain=' + d.join('.') + ' ;path=';
+							var p = location.pathname.split('/');
+							document.cookie = cookieBase + '/';
+							while (p.length > 0) {
+								document.cookie = cookieBase + p.join('/');
+								p.pop();
+							}
+							d.shift();
+						}
+					}
+				})();
+			}
+		});
+	} catch (e) {
+		console.warn("Failed to inject full cookie clear script:", e);
+	}
 	console.log("Patched Bing, cleared cookies, localStorage, sessionStorage, sending login trigger message");
 	await app.tabs.sendMessage(automatedTabId, { action: "triggerLoginAfterPatch" });
 }

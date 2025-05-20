@@ -220,6 +220,16 @@ async function clickHamburgerAndLogin() {
 
 	// 3. Find sign-in element
 	const signInElement = document.getElementById("HBSignIn");
+	if (signInElement) {
+		// Kiểm tra nếu đã đăng nhập (có #hb_n và text khác rỗng và không bị ẩn)
+		const hb_n = signInElement.querySelector('#hb_n');
+		if (hb_n && hb_n.textContent.trim() !== '' && hb_n.style.display !== 'none') {
+			console.log("User already logged in, skipping login click.");
+			return false;
+		}
+	}
+
+	// Nếu chưa đăng nhập, thực hiện thao tác login như cũ
 	if (!signInElement) {
 		const possibleSignIn = document.querySelector('[role="menuitem"][href*="signin"]');
 		if (!possibleSignIn) {
