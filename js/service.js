@@ -597,9 +597,27 @@ async function initialise(desk, mob, min, max) {
 		await app.storage.local.set({ config });
 		// send a msg to popup to update the ui
 		app.runtime.sendMessage({ action: "updateUI" });
+		// Đóng tab tự động nếu còn tồn tại
+		if (automatedTabId) {
+			try {
+				await app.tabs.remove(automatedTabId);
+			} catch (e) {
+				console.warn("Failed to close automated tab:", e);
+			}
+			automatedTabId = null;
+		}
 		return;
 	}
 	// Removed: opening rewards.bing.com, moreTools, or panelflyout tabs for both desktop and mobile search.
+	// Đóng tab tự động nếu còn tồn tại
+	if (automatedTabId) {
+		try {
+			await app.tabs.remove(automatedTabId);
+		} catch (e) {
+			console.warn("Failed to close automated tab:", e);
+		}
+		automatedTabId = null;
+	}
 }
 
 // Ghi log mỗi lần schedule chạy
