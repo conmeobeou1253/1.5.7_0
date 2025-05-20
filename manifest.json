@@ -33,5 +33,5 @@
    "permissions": [ "alarms", "browsingData", "debugger", "storage", "tabs", "notifications" ],
    "short_name": "RSA",
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.5.7"
+   "version": "1.4.4"
 }
