@@ -76,9 +76,6 @@ async function fetchStorage() {
 	}
 	// Force pro mode
 	pro = { key: "always-pro-key", seats: 1 };
-	// Force tech niche and patch mobile
-	config.niche = "tech";
-	config.patch = true;
 	await app.storage.local.set({ config });
 	await app.storage.sync.set({ pro });
 	await updateUI();
@@ -152,14 +149,6 @@ async function updateUI() {
 		await app.storage.local.set({ config });
 		$shuffle.text(config.deviceName);
 	}
-
-	// Force tech niche and patch mobile
-	config.niche = "tech";
-	config.patch = true;
-	$searchNiche.removeClass("selected");
-	$("#searchtech").addClass("selected");
-	$yesPatch.addClass("selected");
-	$noPatch.removeClass("selected");
 
 	// Force pro mode
 	pro.key = "always-pro-key";
