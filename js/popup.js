@@ -13,7 +13,7 @@ let config = {
 	scheduleDefault: "scheduleT1",
 	isRunning: false,
 	userConsent: false,
-	patch: false,
+	patch: true,
 	niche: "random",
 };
 let pro = {
